@@ -1,5 +1,7 @@
 package com.hactiv8.calculator3;
 
+//import android.content.Context;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.button.MaterialButton;
+
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -64,6 +69,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        MaterialButton button = (MaterialButton) view;
+        String buttonText = button.getText().toString();
+        String dataCalculate = solution_tv.getText().toString();
+
+        if ("C".equals(buttonText)){
+            solution_tv.setText("");
+            result_tv.setText("0");
+            return;
+        } else if ("=".equals(buttonText)) {
+            solution_tv.setText(result_tv.getText());
+            return;
+        } else if ("del".equals(buttonText)) {
+            if (!"".equals(dataCalculate)) {
+                dataCalculate = dataCalculate.substring(0, dataCalculate.length() - 1);
+            }
+
+        } else {
+            dataCalculate = dataCalculate+buttonText;
+        }
+        solution_tv.setText(dataCalculate);
+        String finalResult = getResult(dataCalculate);
+            if (!"Err".equals(finalResult)){
+                if (!"".equals(dataCalculate)){
+                    result_tv.setText(finalResult);
+                }else {
+                    result_tv.setText("0");
+                }
+            }
 
     }
+        String getResult(String data){
+            try {
+                Context context = Context.enter();
+                context.setOptimizationLevel(-1);
+                Scriptable scriptable = context.initStandardObjects();
+                String finalResult = context.evaluateString(scriptable,data,"Javascript", 1,null).toString();
+                return finalResult;
+            }catch (Exception e){
+                return "Err";
+            }
+        }
 }
