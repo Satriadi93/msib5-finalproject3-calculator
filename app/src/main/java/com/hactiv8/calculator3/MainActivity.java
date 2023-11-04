@@ -17,11 +17,14 @@ import com.google.android.material.button.MaterialButton;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView solution_tv, result_tv;
     MaterialButton btnC, btnKurungAwal, btnKurungAkhir;
-    MaterialButton btnBagi, btnKali, btnKurang, btnTambah;
+    MaterialButton btnBagi, btnKali, btnKurang, btnTambah, btnPersen;
     MaterialButton btnKoma, btnHapus, btnSamaDengan;
     MaterialButton btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
 
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         deklarasiIdBtn(btnKali, R.id.btnKali);
         deklarasiIdBtn(btnKurang, R.id.btnKurang);
         deklarasiIdBtn(btnTambah, R.id.btnTambah);
+        deklarasiIdBtn(btnPersen, R.id.btnPersen);
         deklarasiIdBtn(btnKoma, R.id.btnKoma);
         deklarasiIdBtn(btnHapus, R.id.btnHapus);
         deklarasiIdBtn(btnSamaDengan, R.id.btnSamaDengan);
@@ -86,6 +90,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         } else {
+            List<String> operator = Arrays.asList("+", "-", "*", "/", "%", ".");
+            List<String> operatorv2 = Arrays.asList("+", "-", "*", "/", ".");
+            if (operator.contains(buttonText) && dataCalculate.isEmpty()) {
+                return;
+            } else if (operator.contains(buttonText) && operatorv2.contains(dataCalculate.substring(dataCalculate.length() - 1))) {
+                dataCalculate = dataCalculate.substring(0, dataCalculate.length() - 1);
+            } else if (")".equals(buttonText)) {
+                int jumlahKurungBuka = 0;
+                int jumlahKurungTutup = 0;
+                for (char c : dataCalculate.toCharArray()) {
+                    if (c == '(') {
+                        jumlahKurungBuka++;
+                    } else if (c == ')') {
+                        jumlahKurungTutup++;
+                    }
+                }
+                if (jumlahKurungTutup >= jumlahKurungBuka) {
+                    return;
+                }
+            }
             dataCalculate = dataCalculate+buttonText;
         }
         solution_tv.setText(dataCalculate);
