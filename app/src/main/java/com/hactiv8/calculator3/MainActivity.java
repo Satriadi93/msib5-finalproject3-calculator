@@ -124,10 +124,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
         String getResult(String data){
+            char temp;
+            for (int i = 0; i < data.length(); i++) {
+                temp = data.charAt(i);
+                if (temp == '%') {
+                    data = data.substring(0, i) + "/100" + data.substring(i+1);
+                }
+            }
             try {
                 Context context = Context.enter();
                 context.setOptimizationLevel(-1);
-                Scriptable scriptable = context.initStandardObjects();
+                Scriptable scriptable;
+                scriptable = context.initStandardObjects();
                 String finalResult = context.evaluateString(scriptable,data,"Javascript", 1,null).toString();
                 return finalResult;
             }catch (Exception e){
