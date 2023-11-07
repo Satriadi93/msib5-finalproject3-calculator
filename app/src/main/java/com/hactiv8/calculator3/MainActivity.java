@@ -81,7 +81,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dataCalculate = dataCalculate.substring(0, dataCalculate.length() - 1);
                 }
 
+            case "( )":
+                int openParenthesisCount = countOccurrences(dataCalculate, "(");
+                int closeParenthesisCount = countOccurrences(dataCalculate, ")");
+
+                if (openParenthesisCount == closeParenthesisCount) {
+                    dataCalculate = dataCalculate + "(";
+                } else if (openParenthesisCount > closeParenthesisCount) {
+                    dataCalculate = dataCalculate + ")";
+                } else {
+                    dataCalculate = dataCalculate + "(";
+                }
+
                 break;
+
             default:
                 List<String> operator = Arrays.asList("+", "-", "*", "/", "%", ".");
                 List<String> operatorv2 = Arrays.asList("+", "-", "*", "/", ".");
@@ -89,19 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 } else if (operator.contains(buttonText) && operatorv2.contains(dataCalculate.substring(dataCalculate.length() - 1))) {
                     dataCalculate = dataCalculate.substring(0, dataCalculate.length() - 1);
-                } else if ("( )".equals(buttonText)) {
-                    int openParenthesisCount = countOccurrences(dataCalculate, "(");
-                    int closeParenthesisCount = countOccurrences(dataCalculate, ")");
-
-                    if (openParenthesisCount == closeParenthesisCount) {
-                        dataCalculate = dataCalculate + "(";
-                    } else if (openParenthesisCount > closeParenthesisCount) {
-                        dataCalculate = dataCalculate + ")";
-                    } else {
-                        dataCalculate = dataCalculate + "(";
-                    }
                 }
                 dataCalculate = dataCalculate + buttonText;
+
                 break;
         }
 
