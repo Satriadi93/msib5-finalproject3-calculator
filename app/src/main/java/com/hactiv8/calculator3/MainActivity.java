@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!"".equals(dataCalculate)) {
                     dataCalculate = dataCalculate.substring(0, dataCalculate.length() - 1);
                 }
+                break;
 
             case "( )":
                 int openParenthesisCount = countOccurrences(dataCalculate, "(");
@@ -117,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     result_tv.setText("0");
                 }
             }
-
     }
 
     private int countOccurrences(String text, String target) {
@@ -144,14 +144,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 data = data.substring(0, i) + "/100*" + data.substring(i + 1);
             }
         }
+        data = data.replaceAll("\\b0+(?!\\b)", "");
         try {
+
+            if(data.isEmpty()){
+                return "";
+            }
+
             Context context = Context.enter();
             context.setOptimizationLevel(-1);
             Scriptable scriptable = context.initStandardObjects();
             String finalResult = context.evaluateString(scriptable, data, "Javascript", 1, null).toString();
 
             double result = Double.parseDouble(finalResult);
-            DecimalFormat decimalFormat = new DecimalFormat("#.########");
+            DecimalFormat decimalFormat = new DecimalFormat("#.########"); // Format untuk menghilangkan koma nol
             finalResult = decimalFormat.format(result);
 
             return finalResult;
@@ -159,6 +165,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return "Err";
         }
     }
-
 
 }
