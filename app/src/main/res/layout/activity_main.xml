@@ -18,11 +18,14 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="0123456789"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="32sp"
+        android:autoSizeMaxTextSize="72sp"
+        android:text=""
         android:textAlignment="textEnd"
         android:textColor="@color/black"
-        android:textSize="30sp"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        tools:targetApi="o" />
 
     <TextView
         android:id="@+id/result_tv"
@@ -30,10 +33,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnLayout"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="0123456789"
+        android:text=""
         android:textAlignment="textEnd"
         android:textColor="@color/black"
         android:textSize="56sp"
