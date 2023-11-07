@@ -141,7 +141,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < data.length(); i++) {
             temp = data.charAt(i);
             if (temp == '%') {
-                data = data.substring(0, i) + "/100*" + data.substring(i + 1);
+                if (i + 1 >= data.length() || !Character.isDigit(data.charAt(i + 1))) {
+                    data = data.substring(0, i) + "/100*1" + data.substring(i + 1);
+                } else {
+                    data = data.substring(0, i) + "/100*" + data.substring(i + 1);
+                }
             }
         }
         data = data.replaceAll("\\b0+(?!\\b)", "");
