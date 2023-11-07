@@ -1,7 +1,5 @@
 package com.hactiv8.calculator3;
 
-//import android.content.Context;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +15,8 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -80,20 +80,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!"".equals(dataCalculate)) {
                     dataCalculate = dataCalculate.substring(0, dataCalculate.length() - 1);
                 }
-                break;
-            case "( )":
-                int openParenthesisCount = countOccurrences(dataCalculate, "(");
-                int closeParenthesisCount = countOccurrences(dataCalculate, ")");
 
-                if (openParenthesisCount == closeParenthesisCount) {
-                    dataCalculate = dataCalculate + "(";
-                } else if (openParenthesisCount > closeParenthesisCount) {
-                    dataCalculate = dataCalculate + ")";
-                } else {
-                    dataCalculate = dataCalculate + "(";
-                }
                 break;
             default:
+                List<String> operator = Arrays.asList("+", "-", "*", "/", "%", ".");
+                List<String> operatorv2 = Arrays.asList("+", "-", "*", "/", ".");
+                if (operator.contains(buttonText) && dataCalculate.isEmpty()) {
+                    return;
+                } else if (operator.contains(buttonText) && operatorv2.contains(dataCalculate.substring(dataCalculate.length() - 1))) {
+                    dataCalculate = dataCalculate.substring(0, dataCalculate.length() - 1);
+                } else if ("( )".equals(buttonText)) {
+                    int openParenthesisCount = countOccurrences(dataCalculate, "(");
+                    int closeParenthesisCount = countOccurrences(dataCalculate, ")");
+
+                    if (openParenthesisCount == closeParenthesisCount) {
+                        dataCalculate = dataCalculate + "(";
+                    } else if (openParenthesisCount > closeParenthesisCount) {
+                        dataCalculate = dataCalculate + ")";
+                    } else {
+                        dataCalculate = dataCalculate + "(";
+                    }
+                }
                 dataCalculate = dataCalculate + buttonText;
                 break;
         }
@@ -131,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < data.length(); i++) {
             temp = data.charAt(i);
             if (temp == '%') {
-                data = data.substring(0, i) + "/100" + data.substring(i + 1);
+                data = data.substring(0, i) + "/100*" + data.substring(i + 1);
             }
         }
         try {
@@ -141,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String finalResult = context.evaluateString(scriptable, data, "Javascript", 1, null).toString();
 
             double result = Double.parseDouble(finalResult);
-            DecimalFormat decimalFormat = new DecimalFormat("#.########"); // Format untuk menghilangkan koma nol
+            DecimalFormat decimalFormat = new DecimalFormat("#.########");
             finalResult = decimalFormat.format(result);
 
             return finalResult;
@@ -149,4 +156,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return "Err";
         }
     }
+
+
 }
